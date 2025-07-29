@@ -1,15 +1,27 @@
-// Список стоп-слов (можно динамически изменять в будущем)
-const stopWords = new Set([
-    'и', 'или', 'но', 'а', 'если', 'так', 'это', 'тот',
-    'те', 'этот', 'эти', 'все', 'всё', 'нет', 'не', 'без'
-]);
+// Список стоп-слов
+function globalStopWords() {
+    const stopWordsGlobal = new Set(['в',
+        'и', 'или', 'но', 'из', 'на', 'а', 'если', 'так', 'это', 'тот',
+        'те', 'этот', 'эти', 'все', 'всё', 'нет', 'не', 'без','png','file','page'
+    ]); // Глобальные стоп-слова
+    return stopWordsGlobal;
+}
+
+// Local scope
+function localStopWords() {
+    const stopWordsLocal = new Set(['...']); // Локальные стоп-слова
+    return stopWordsLocal;
+}
+
 
 function countWords() {
+    const stopWords = globalStopWords();
     // Получаем чистое содержание страницы (игнорируем HTML-разметку)
     const text = document.body.innerText.trim().toLowerCase();
 
     // Регулярное выражение для разделения текста на слова
-    const words = text.split(/[\s,\.;:\?!]+/).filter(Boolean);
+    const words = text.split(/[\s,\.;:\?!]+/).filter(word => !/\d/.test(word));
+    console.log(words);
 
     // Объект для подсчёта уникальных слов
     let wordCounts = {};
@@ -26,9 +38,9 @@ function countWords() {
 
     // Создаем HTML для визуализации результата
     let resultHTML = `
-<div class="word-stats">
+<div class="wsp_word-stats">
   <h2>Статистика слов:</h2>
-  <button type="button" class="close-btn">Закрыть</button>
+  <button type="button" class="wsp_close-btn">Закрыть</button>
   <ol>
     ${sortedWords.slice(0, 20).map(([word, count]) =>
         `<li><strong>${word}: </strong>${count}</li>`
@@ -39,7 +51,7 @@ function countWords() {
 
 // Добавляем разметку в документ
     const div = document.createElement('div');
-    div.className = 'word-stats-popup';
+    div.className = 'wsp_word-stats-popup';
     div.innerHTML = resultHTML;
     document.body.appendChild(div);
 
@@ -54,7 +66,7 @@ function countWords() {
     div.style.zIndex = '9999'; // Над всеми элементами страницы
 
 // находим кнопку закрытия и назначаем ей слушатель событий
-    const closeBtn = div.querySelector('.close-btn');
+    const closeBtn = div.querySelector('.wsp_close-btn');
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
             document.body.removeChild(div); // Удаляет всплывающее окно
