@@ -1,0 +1,20 @@
+{
+  "name": "Word Counter",
+  "version": "1.0",
+  "description": "Подсчет статистики слов на текущей странице.",
+  "manifest_version": 3,
+  "permissions": ["scripting", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Посчитать слова",
+    "default_popup": "popup.html"
+  },
+  "host_permissions": ["*://*/*"],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
